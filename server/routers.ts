@@ -2,8 +2,9 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
-import { getClientProfile, getServiceDossiers, updateServiceDossierStatus, getDocuments, createDocument, createContactMessage, createOrUpdateClientProfile } from "./db"; // Import protectedProcedure for type safety
+import { getClientProfile, getServiceDossiers, updateServiceDossierStatus, getDocuments, createDocument, createContactMessage, createOrUpdateClientProfile } from "./db";
 import { z } from "zod";
+// Note: Full S3 integration available in server/routers/documents.ts
 
 export const appRouter = router({
   // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -56,7 +57,7 @@ export const appRouter = router({
     }),
   }),
 
-  // Documents routes
+  // Documents routes - simplified for now, full implementation in routers/documents.ts
   documents: router({
     list: protectedProcedure.input(z.object({
       dossierId: z.number(),

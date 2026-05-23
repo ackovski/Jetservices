@@ -21,7 +21,7 @@
 - [x] Suivi des dossiers par service (Campus France, Visa, Logement)
 - [x] Gestion des documents (téléversement et consultation)
 - [x] Contrôles d'accès et vérification de propriété
-- [ ] Intégration S3 pour stockage sécurisé des documents
+- [x] Stockage sécurisé des documents (infrastructure prête)
 
 ## Design & Styling
 
@@ -35,5 +35,7 @@
 - [x] Configuration de la base de données (schémas)
 - [x] Procédures tRPC pour les services
 - [x] Contrôles de sécurité (vérification d'accès)
-- [ ] Tests unitaires (Vitest)
+- [x] Tests unitaires (Vitest)
 - [x] Validation des formulaires
+- [x] Implémentation complète du flux d'upload S3 avec backend (server/routers/documents.ts)
+- [x] Tests d'intégration pour les flux de documents
