@@ -1,0 +1,39 @@
+# JET Services - TODO
+
+## Pages Publiques
+
+- [x] Page d'accueil (Hero, services clés, CTA)
+- [x] Page "Nos Services" (6 services détaillés)
+- [x] Page "Destinations" (France, Canada, Maroc, Tunisie)
+- [x] Page "À Propos" (Mission, valeurs, équipe)
+- [x] Page "Contact" (Formulaire sécurisé + coordonnées)
+
+## Navigation & Layout
+
+- [x] Header avec navigation responsive
+- [x] Footer avec liens réseaux sociaux et mentions légales
+- [x] Menu mobile adaptatif
+
+## Espace Client (Authentification & Sécurité)
+
+- [x] Page de connexion/inscription (via Manus OAuth)
+- [x] Tableau de bord client
+- [x] Suivi des dossiers par service (Campus France, Visa, Logement)
+- [x] Gestion des documents (téléversement et consultation)
+- [x] Contrôles d'accès et vérification de propriété
+- [ ] Intégration S3 pour stockage sécurisé des documents
+
+## Design & Styling
+
+- [x] Palette de couleurs élégante et professionnelle
+- [x] Typographie raffinée
+- [x] Espacements généreux et mise en page irréprochable
+- [x] Responsive design mobile-first
+
+## Infrastructure & Tests
+
+- [x] Configuration de la base de données (schémas)
+- [x] Procédures tRPC pour les services
+- [x] Contrôles de sécurité (vérification d'accès)
+- [ ] Tests unitaires (Vitest)
+- [x] Validation des formulaires

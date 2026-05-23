@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, clientProfiles, InsertClientProfile, serviceDossiers, InsertServiceDossier, documents, InsertDocument, contactMessages, InsertContactMessage } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,104 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+export async function getClientProfile(userId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(clientProfiles).where(eq(clientProfiles.userId, userId)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createOrUpdateClientProfile(userId: number, data: Partial<InsertClientProfile>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const existing = await db.select().from(clientProfiles).where(eq(clientProfiles.userId, userId)).limit(1);
+  
+  if (existing.length > 0) {
+    await db.update(clientProfiles).set(data).where(eq(clientProfiles.userId, userId));
+    return existing[0];
+  } else {
+    const result = await db.insert(clientProfiles).values({ userId, ...data });
+    return { ...data, userId, id: result[0]?.insertId };
+  }
+}
+
+export async function getServiceDossiers(clientId: number, userId?: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  // Verify ownership if userId is provided
+  if (userId) {
+    const profile = await db.select().from(clientProfiles).where(eq(clientProfiles.id, clientId)).limit(1);
+    if (!profile.length || profile[0].userId !== userId) return [];
+  }
+  
+  return db.select().from(serviceDossiers).where(eq(serviceDossiers.clientId, clientId));
+}
+
+export async function createServiceDossier(data: InsertServiceDossier) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(serviceDossiers).values(data);
+}
+
+export async function updateServiceDossierStatus(dossierId: number, status: string, notes?: string, userId?: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Verify ownership if userId is provided
+  if (userId) {
+    const dossier = await db.select().from(serviceDossiers).where(eq(serviceDossiers.id, dossierId)).limit(1);
+    if (!dossier.length) throw new Error("Dossier not found");
+    
+    const profile = await db.select().from(clientProfiles).where(eq(clientProfiles.id, dossier[0].clientId)).limit(1);
+    if (!profile.length || profile[0].userId !== userId) throw new Error("Unauthorized");
+  }
+  
+  await db.update(serviceDossiers).set({ status: status as any, notes }).where(eq(serviceDossiers.id, dossierId));
+}
+
+export async function getDocuments(dossierId: number, userId?: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  // Verify ownership if userId is provided
+  if (userId) {
+    const dossier = await db.select().from(serviceDossiers).where(eq(serviceDossiers.id, dossierId)).limit(1);
+    if (!dossier.length) return [];
+    
+    const profile = await db.select().from(clientProfiles).where(eq(clientProfiles.id, dossier[0].clientId)).limit(1);
+    if (!profile.length || profile[0].userId !== userId) return [];
+  }
+  
+  return db.select().from(documents).where(eq(documents.dossierId, dossierId));
+}
+
+export async function createDocument(data: InsertDocument, userId?: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Verify ownership if userId is provided
+  if (userId) {
+    const dossier = await db.select().from(serviceDossiers).where(eq(serviceDossiers.id, data.dossierId)).limit(1);
+    if (!dossier.length) throw new Error("Dossier not found");
+    
+    const profile = await db.select().from(clientProfiles).where(eq(clientProfiles.id, dossier[0].clientId)).limit(1);
+    if (!profile.length || profile[0].userId !== userId) throw new Error("Unauthorized");
+  }
+  
+  const result = await db.insert(documents).values(data);
+  return result;
+}
+
+export async function createContactMessage(data: InsertContactMessage) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(contactMessages).values(data);
+}
+
+export async function getContactMessages(limit: number = 50) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(contactMessages).orderBy((t) => t.createdAt).limit(limit);
+}
