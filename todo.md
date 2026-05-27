@@ -39,3 +39,16 @@
 - [x] Validation des formulaires
 - [x] Implémentation complète du flux d'upload S3 avec backend (server/routers/documents.ts)
 - [x] Tests d'intégration pour les flux de documents
+
+
+## Amélioration Design & Visuels (Phase 2)
+
+- [ ] Générer/récupérer images pour les 6 services
+- [ ] Générer/récupérer images pour les 4 destinations
+- [ ] Générer/récupérer image hero pour l'accueil
+- [ ] Enrichir la palette de couleurs (couleurs distinctes par section)
+- [ ] Mettre à jour les composants Services avec images et couleurs
+- [ ] Mettre à jour les composants Destinations avec images et couleurs
+- [ ] Améliorer la section Accueil avec visuels
+- [ ] Tester la responsivité avec les nouvelles images
+- [ ] Vérifier que le design reste naturel et professionnel
