@@ -185,8 +185,8 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {destinations.map((dest, index) => (
-              <Link key={index} href="/destinations">
-                <Card className="overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer group h-full">
+              <div key={index} className="cursor-pointer" onClick={() => window.location.href = '/destinations'}>
+                <Card className="overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group h-full">
                   {/* Image */}
                   <div className="relative h-48 overflow-hidden bg-slate-100">
                     <img
@@ -208,7 +208,7 @@ export default function Home() {
                     </p>
                   </div>
                 </Card>
-              </Link>
+              </div>
             ))}
           </div>
 
