@@ -43,12 +43,12 @@
 
 ## Amélioration Design & Visuels (Phase 2)
 
-- [ ] Générer/récupérer images pour les 6 services
-- [ ] Générer/récupérer images pour les 4 destinations
-- [ ] Générer/récupérer image hero pour l'accueil
-- [ ] Enrichir la palette de couleurs (couleurs distinctes par section)
-- [ ] Mettre à jour les composants Services avec images et couleurs
-- [ ] Mettre à jour les composants Destinations avec images et couleurs
-- [ ] Améliorer la section Accueil avec visuels
-- [ ] Tester la responsivité avec les nouvelles images
-- [ ] Vérifier que le design reste naturel et professionnel
+- [x] Générer/récupérer images pour les 6 services
+- [x] Générer/récupérer images pour les 4 destinations
+- [x] Générer/récupérer image hero pour l'accueil
+- [x] Enrichir la palette de couleurs (couleurs distinctes par section)
+- [x] Mettre à jour les composants Services avec images et couleurs
+- [x] Mettre à jour les composants Destinations avec images et couleurs
+- [x] Améliorer la section Accueil avec visuels
+- [x] Tester la responsivité avec les nouvelles images (16 tests passés)
+- [x] Vérifier que le design reste naturel et professionnel
