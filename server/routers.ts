@@ -4,6 +4,10 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { getClientProfile, getServiceDossiers, updateServiceDossierStatus, getDocuments, createDocument, createContactMessage, createOrUpdateClientProfile } from "./db";
 import { z } from "zod";
+import { studentsRouter } from "./routers/students";
+import { messagingRouter } from "./routers/messaging";
+import { paymentsRouter } from "./routers/payments";
+import { invitationsRouter } from "./routers/invitations";
 // Note: Full S3 integration available in server/routers/documents.ts
 
 export const appRouter = router({
@@ -92,6 +96,12 @@ export const appRouter = router({
       return { success: true };
     }),
   }),
+
+  // RBAC routers
+  students: studentsRouter,
+  messaging: messagingRouter,
+  payments: paymentsRouter,
+  invitations: invitationsRouter,
 });
 
 export type AppRouter = typeof appRouter;

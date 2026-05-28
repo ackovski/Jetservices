@@ -52,3 +52,12 @@
 - [x] Améliorer la section Accueil avec visuels
 - [x] Tester la responsivité avec les nouvelles images (16 tests passés)
 - [x] Vérifier que le design reste naturel et professionnel
+
+
+## Système RBAC (Role-Based Access Control)
+
+- [ ] Étendre le schéma avec tables de rôles et permissions
+- [ ] Implémenter les procédures tRPC pour la gestion des rôles
+- [ ] Créer le tableau de bord administrateur
+- [ ] Ajouter le système d'invitation par email
+- [ ] Tester et valider les permissions
