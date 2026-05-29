@@ -56,8 +56,12 @@
 
 ## Système RBAC (Role-Based Access Control)
 
-- [ ] Étendre le schéma avec tables de rôles et permissions
-- [ ] Implémenter les procédures tRPC pour la gestion des rôles
-- [ ] Créer le tableau de bord administrateur
-- [ ] Ajouter le système d'invitation par email
-- [ ] Tester et valider les permissions
+- [x] Étendre le schéma avec tables de rôles et permissions (10 nouvelles tables)
+- [x] Implémenter les procédures tRPC pour la gestion des rôles (4 routers)
+- [x] Créer le tableau de bord administrateur (AdminDashboard, ConseillerDashboard, StudentDashboard)
+- [x] Ajouter le système d'invitation par email (router invitations complet)
+- [x] Tester et valider les permissions (16 tests passés)
+- [x] Créer les dashboards multi-rôle (Admin, Conseiller, Étudiant)
+- [x] Implémenter la page détail Étudiant avec onglets
+- [x] Intégrer Stripe pour les paiements
+- [x] Mettre en place les controles d'accès granulaires

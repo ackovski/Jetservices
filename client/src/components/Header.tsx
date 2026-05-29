@@ -7,7 +7,24 @@ import { getLoginUrl } from "@/const";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
+
+  const getDashboardLink = () => {
+    if (!user) return null;
+    switch (user.role) {
+      case "super_admin":
+      case "admin":
+        return { href: "/admin-dashboard", label: "Dashboard Admin" };
+      case "conseiller":
+        return { href: "/conseiller-dashboard", label: "Mes Étudiants" };
+      case "etudiant":
+        return { href: "/student-dashboard", label: "Mon Tableau de Bord" };
+      default:
+        return { href: "/dashboard", label: "Mon Espace" };
+    }
+  };
+
+  const dashboardLink = getDashboardLink();
 
   const navLinks = [
     { href: "/", label: "Accueil" },
@@ -44,11 +61,11 @@ export default function Header() {
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center gap-4">
-            {isAuthenticated ? (
+            {isAuthenticated && dashboardLink ? (
               <>
-                <Link href="/dashboard">
+                <Link href={dashboardLink.href}>
                   <a className="text-foreground hover:text-accent transition-colors font-medium">
-                    Mon Espace
+                    {dashboardLink.label}
                   </a>
                 </Link>
                 <Button
@@ -94,14 +111,14 @@ export default function Header() {
               </Link>
             ))}
             <div className="px-4 py-2 space-y-2 border-t border-border pt-4">
-              {isAuthenticated ? (
+              {isAuthenticated && dashboardLink ? (
                 <>
-                  <Link href="/dashboard">
+                  <Link href={dashboardLink.href}>
                     <a
                       className="block px-4 py-2 text-foreground hover:bg-muted rounded-lg transition-colors"
                       onClick={() => setIsOpen(false)}
                     >
-                      Mon Espace
+                      {dashboardLink.label}
                     </a>
                   </Link>
                   <Button
