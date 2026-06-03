@@ -9,6 +9,7 @@ import Services from "./pages/Services";
 import Destinations from "./pages/Destinations";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Signup from "./pages/Signup";
 import ClientDashboard from "./pages/ClientDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import ConseillerDashboard from "./pages/ConseillerDashboard";
@@ -25,6 +26,7 @@ function Router() {
       <Route path={"/destinations"} component={Destinations} />
       <Route path={"/about"} component={About} />
       <Route path={"/contact"} component={Contact} />
+      <Route path={"/signup"} component={Signup} />
       <Route path={"/dashboard"} component={ClientDashboard} />
       <Route path={"/admin-dashboard"} component={AdminDashboard} />
       <Route path={"/conseiller-dashboard"} component={ConseillerDashboard} />

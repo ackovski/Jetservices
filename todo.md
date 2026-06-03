@@ -65,3 +65,13 @@
 - [x] Implémenter la page détail Étudiant avec onglets
 - [x] Intégrer Stripe pour les paiements
 - [x] Mettre en place les controles d'accès granulaires
+
+
+## Inscription des Étudiants (Phase 3)
+
+- [ ] Créer la page d'inscription publique (/signup)
+- [ ] Implémenter le formulaire d'inscription avec validation
+- [ ] Créer la procédure tRPC pour l'inscription
+- [ ] Ajouter le lien d'inscription dans le Header
+- [ ] Tester le flux d'inscription complet
+- [ ] Ajouter les tests unitaires pour l'inscription

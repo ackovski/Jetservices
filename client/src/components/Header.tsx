@@ -77,14 +77,25 @@ export default function Header() {
                 </Button>
               </>
             ) : (
-              <Button
-                size="sm"
-                onClick={() => {
-                  window.location.href = getLoginUrl();
-                }}
-              >
-                Connexion
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    window.location.href = "/signup";
+                  }}
+                >
+                  S'inscrire
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    window.location.href = getLoginUrl();
+                  }}
+                >
+                  Connexion
+                </Button>
+              </div>
             )}
           </div>
 
@@ -134,16 +145,29 @@ export default function Header() {
                   </Button>
                 </>
               ) : (
-                <Button
-                  size="sm"
-                  className="w-full"
-                  onClick={() => {
-                    window.location.href = getLoginUrl();
-                    setIsOpen(false);
-                  }}
-                >
-                  Connexion
-                </Button>
+                <div className="space-y-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => {
+                      window.location.href = "/signup";
+                      setIsOpen(false);
+                    }}
+                  >
+                    S'inscrire
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="w-full"
+                    onClick={() => {
+                      window.location.href = getLoginUrl();
+                      setIsOpen(false);
+                    }}
+                  >
+                    Connexion
+                  </Button>
+                </div>
               )}
             </div>
           </nav>
