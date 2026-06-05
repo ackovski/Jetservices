@@ -7,10 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Plus, Mail, Users, DollarSign, MessageSquare } from "lucide-react";
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 
 export default function AdminDashboard() {
   const { user, loading } = useAuth();
+  const [, setLocation] = useLocation();
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<"admin" | "conseiller" | "partenaire">("conseiller");
   const [studentSearch, setStudentSearch] = useState("");
@@ -170,7 +172,11 @@ export default function AdminDashboard() {
                             </td>
                             <td className="py-2">{student.progressPercentage || 0}%</td>
                             <td className="py-2">
-                              <Button variant="ghost" size="sm">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setLocation(`/student/${student.id}`)}
+                              >
                                 Voir Détails
                               </Button>
                             </td>

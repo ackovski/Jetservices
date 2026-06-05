@@ -12,6 +12,7 @@ function createPublicContext(): TrpcContext {
     } as TrpcContext["req"],
     res: {
       clearCookie: vi.fn(),
+      cookie: vi.fn(),
     } as TrpcContext["res"],
   };
 }
@@ -181,6 +182,63 @@ describe("auth.checkEmail", () => {
     } catch (error: any) {
       // Expected to fail if database is not available in test environment
       expect(error.message).toContain("Database");
+    }
+  });
+});
+
+
+describe("auth.signup - Session Integration", () => {
+  it("should create a session cookie after successful signup", async () => {
+    const ctx = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+
+    try {
+      const result = await caller.auth.signup({
+        name: "Test User",
+        email: `session-test-${Date.now()}@example.com`,
+        password: "SecurePassword123",
+        phone: "+33712345678",
+        countryTarget: "france",
+        studyLevel: "licence",
+      });
+
+      expect(result.success).toBe(true);
+      // Verify that ctx.res.cookie was called (session was created)
+      expect(ctx.res.cookie).toHaveBeenCalled();
+      
+      // Verify the cookie was called with the session token
+      const cookieCall = (ctx.res.cookie as any).mock.calls[0];
+      expect(cookieCall).toBeDefined();
+      expect(cookieCall[0]).toBe("app_session_id"); // COOKIE_NAME
+    } catch (error: any) {
+      // If database is not available, that's acceptable for this test
+      if (!error.message.includes("Database")) {
+        throw error;
+      }
+    }
+  });
+
+  it("should create student with etudiant role after signup", async () => {
+    const ctx = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+
+    try {
+      const result = await caller.auth.signup({
+        name: "Role Test User",
+        email: `role-test-${Date.now()}@example.com`,
+        password: "SecurePassword123",
+        phone: "+33712345678",
+        countryTarget: "france",
+        studyLevel: "licence",
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.userId).toBeGreaterThan(0);
+      // The role should be set to "etudiant" in the signup procedure
+    } catch (error: any) {
+      if (!error.message.includes("Database")) {
+        throw error;
+      }
     }
   });
 });

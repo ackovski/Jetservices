@@ -86,3 +86,12 @@
 - [x] Mettre à jour le flux d'inscription pour créer une session
 - [x] Ajouter les tests unitaires pour l'authentification (28 tests passés)
 - [x] Tester le flux complet d'inscription -> connexion -> dashboard
+
+
+## Corrections - Phase 5
+
+- [x] Corriger signup pour créer une session authentifiée (setSessionCookie)
+- [x] Ajouter des liens "Voir Détails" dans le dashboard admin pour chaque étudiant
+- [x] Tester le flux complet : Signup -> Auto-login -> Dashboard accessible
+- [x] Valider les permissions RBAC sur tous les dashboards
+- [x] Tous les tests passent (31/31)

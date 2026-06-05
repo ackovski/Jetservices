@@ -6,6 +6,9 @@ import { eq } from "drizzle-orm";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "../_core/cookies";
 import { hashPassword } from "../_core/password";
+import { sdk } from "../_core/sdk";
+
+const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
 const signupSchema = z.object({
   name: z.string().min(2, "Le nom doit avoir au moins 2 caractères"),
@@ -16,6 +19,14 @@ const signupSchema = z.object({
   studyLevel: z.enum(["bac", "licence", "master", "doctorat"]),
 });
 
+const setSessionCookie = async (ctx: any, userOpenId: string) => {
+  const sessionToken = await sdk.createSessionToken(userOpenId, {
+    expiresInMs: ONE_YEAR_MS,
+  });
+  const cookieOptions = getSessionCookieOptions(ctx.req);
+  ctx.res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
+};
+
 export const authRouter = router({
   me: publicProcedure.query(opts => opts.ctx.user),
   logout: publicProcedure.mutation(({ ctx }) => {
@@ -25,7 +36,7 @@ export const authRouter = router({
   }),
   signup: publicProcedure
     .input(signupSchema)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
 
@@ -44,9 +55,12 @@ export const authRouter = router({
         // Hash password
         const hashedPassword = await hashPassword(input.password);
 
+        // Générer un openId unique
+        const openId = `student_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
         // Créer un nouvel utilisateur avec le rôle "etudiant"
         const userResult = await db.insert(users).values({
-          openId: `student_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          openId: openId,
           name: input.name,
           email: input.email,
           password: hashedPassword,
@@ -83,9 +97,12 @@ export const authRouter = router({
           updatedAt: new Date(),
         });
 
+        // Créer une session authentifiée (comme dans login)
+        await setSessionCookie(ctx, openId);
+
         return {
           success: true,
-          message: "Inscription réussie ! Vous pouvez maintenant vous connecter.",
+          message: "Inscription réussie ! Redirection vers votre tableau de bord...",
           userId: userId,
         };
       } catch (error) {
