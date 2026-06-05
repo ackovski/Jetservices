@@ -15,6 +15,7 @@ import { Loader2 } from "lucide-react";
 const signupSchema = z.object({
   name: z.string().min(2, "Le nom doit avoir au moins 2 caractères"),
   email: z.string().email("Email invalide"),
+  password: z.string().min(6, "Le mot de passe doit avoir au moins 6 caractères"),
   phone: z.string().min(10, "Le téléphone doit avoir au moins 10 chiffres"),
   countryTarget: z.enum(["france", "canada", "maroc", "tunisie"]),
   studyLevel: z.enum(["bac", "licence", "master", "doctorat"]),
@@ -31,6 +32,7 @@ export default function Signup() {
     defaultValues: {
       name: "",
       email: "",
+      password: "",
       phone: "",
       countryTarget: undefined,
       studyLevel: undefined,
@@ -39,10 +41,10 @@ export default function Signup() {
 
   const signupMutation = trpc.auth.signup.useMutation({
     onSuccess: () => {
-      toast.success("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+      toast.success("Inscription réussie ! Redirection vers votre tableau de bord...");
       setTimeout(() => {
-        setLocation("/");
-      }, 2000);
+        setLocation("/student-dashboard");
+      }, 1500);
     },
     onError: (error) => {
       toast.error(error.message || "Erreur lors de l'inscription");
@@ -91,6 +93,21 @@ export default function Signup() {
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input type="email" placeholder="jean@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Mot de Passe */}
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Mot de Passe</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="Au moins 6 caracteres" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

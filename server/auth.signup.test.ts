@@ -104,6 +104,7 @@ describe("auth.signup", () => {
       const result = await caller.auth.signup({
         name: "Jean Dupont",
         email: `jean-${Date.now()}@example.com`,
+        password: "SecurePassword123",
         phone: "+33712345678",
         countryTarget: "france",
         studyLevel: "licence",
@@ -127,6 +128,7 @@ describe("auth.signup", () => {
       await caller.auth.signup({
         name: "Jean Dupont",
         email: uniqueEmail,
+        password: "SecurePassword123",
         phone: "+33712345678",
         countryTarget: "france",
         studyLevel: "licence",
@@ -136,6 +138,7 @@ describe("auth.signup", () => {
       await caller.auth.signup({
         name: "Marie Dupont",
         email: uniqueEmail,
+        password: "SecurePassword456",
         phone: "+33712345679",
         countryTarget: "canada",
         studyLevel: "master",

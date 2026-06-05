@@ -5,10 +5,12 @@ import { students, users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "../_core/cookies";
+import { hashPassword } from "../_core/password";
 
 const signupSchema = z.object({
   name: z.string().min(2, "Le nom doit avoir au moins 2 caractères"),
   email: z.string().email("Email invalide"),
+  password: z.string().min(6, "Le mot de passe doit avoir au moins 6 caractères"),
   phone: z.string().min(10, "Le téléphone doit avoir au moins 10 chiffres"),
   countryTarget: z.enum(["france", "canada", "maroc", "tunisie"]),
   studyLevel: z.enum(["bac", "licence", "master", "doctorat"]),
@@ -39,11 +41,15 @@ export const authRouter = router({
           throw new Error("Un compte avec cet email existe déjà");
         }
 
+        // Hash password
+        const hashedPassword = await hashPassword(input.password);
+
         // Créer un nouvel utilisateur avec le rôle "etudiant"
         const userResult = await db.insert(users).values({
           openId: `student_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           name: input.name,
           email: input.email,
+          password: hashedPassword,
           loginMethod: "email",
           role: "etudiant",
           status: "active",

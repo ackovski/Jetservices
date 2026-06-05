@@ -69,9 +69,20 @@
 
 ## Inscription des Étudiants (Phase 3)
 
-- [ ] Créer la page d'inscription publique (/signup)
-- [ ] Implémenter le formulaire d'inscription avec validation
-- [ ] Créer la procédure tRPC pour l'inscription
-- [ ] Ajouter le lien d'inscription dans le Header
-- [ ] Tester le flux d'inscription complet
-- [ ] Ajouter les tests unitaires pour l'inscription
+- [x] Créer la page d'inscription publique (/signup)
+- [x] Implémenter le formulaire d'inscription avec validation
+- [x] Créer la procédure tRPC pour l'inscription
+- [x] Ajouter le lien d'inscription dans le Header
+- [x] Tester le flux d'inscription complet
+- [x] Ajouter les tests unitaires pour l'inscription (9 tests passés)
+
+
+## Authentification Email/Mot de Passe (Phase 4)
+
+- [x] Ajouter le champ `password` à la table `users`
+- [x] Implémenter le hachage bcrypt des mots de passe
+- [x] Créer la procédure tRPC de connexion (email/mot de passe)
+- [x] Créer la page de connexion pour les étudiants (/login)
+- [x] Mettre à jour le flux d'inscription pour créer une session
+- [x] Ajouter les tests unitaires pour l'authentification (28 tests passés)
+- [x] Tester le flux complet d'inscription -> connexion -> dashboard

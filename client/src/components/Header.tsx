@@ -82,6 +82,15 @@ export default function Header() {
                   variant="outline"
                   size="sm"
                   onClick={() => {
+                    window.location.href = "/login";
+                  }}
+                >
+                  Connexion
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
                     window.location.href = "/signup";
                   }}
                 >
@@ -93,7 +102,7 @@ export default function Header() {
                     window.location.href = getLoginUrl();
                   }}
                 >
-                  Connexion
+                  Google
                 </Button>
               </div>
             )}
@@ -151,6 +160,17 @@ export default function Header() {
                     size="sm"
                     className="w-full"
                     onClick={() => {
+                      window.location.href = "/login";
+                      setIsOpen(false);
+                    }}
+                  >
+                    Connexion
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => {
                       window.location.href = "/signup";
                       setIsOpen(false);
                     }}
@@ -165,7 +185,7 @@ export default function Header() {
                       setIsOpen(false);
                     }}
                   >
-                    Connexion
+                    Google
                   </Button>
                 </div>
               )}
