@@ -1,4 +1,4 @@
-import { protectedProcedure, router } from "../_core/trpc";
+import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { z } from "zod";
 import { getDb } from "../db";
 import { invitations, users } from "../../drizzle/schema";
@@ -6,6 +6,7 @@ import { eq, isNull } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
 import { notifyOwner } from "../_core/notification";
+import { hashPassword } from "../_core/password";
 
 export const invitationsRouter = router({
   // Create invitation (super_admin and admin only)
@@ -101,8 +102,8 @@ export const invitationsRouter = router({
       return result;
     }),
 
-  // Verify invitation token
-  verify: protectedProcedure
+  // Verify invitation token (public - no auth required)
+  verify: publicProcedure
     .input(z.string())
     .query(async ({ input: token }) => {
       const db = await getDb();
@@ -131,19 +132,20 @@ export const invitationsRouter = router({
       };
     }),
 
-  // Accept invitation (create user account)
-  accept: protectedProcedure
+  // Accept invitation (create user account) - public, no auth required
+  accept: publicProcedure
     .input(z.object({
       token: z.string(),
-      name: z.string(),
+      name: z.string().min(2, "Le nom doit avoir au moins 2 caractères"),
+      password: z.string().min(6, "Le mot de passe doit avoir au moins 6 caractères"),
     }))
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
       const invitation = await db.select().from(invitations).where(eq(invitations.token, input.token)).limit(1);
       if (!invitation.length) {
-        throw new TRPCError({ code: "NOT_FOUND" });
+        throw new TRPCError({ code: "NOT_FOUND", message: "Invitation not found" });
       }
 
       const inv = invitation[0];
@@ -157,19 +159,39 @@ export const invitationsRouter = router({
         throw new TRPCError({ code: "BAD_REQUEST", message: "Invitation already used" });
       }
 
+      // Check if user already exists
+      const existingUser = await db.select().from(users).where(eq(users.email, inv.email)).limit(1);
+      if (existingUser.length) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "User already exists with this email" });
+      }
+
+      // Hash password
+      const hashedPassword = await hashPassword(input.password);
+
+      // Generate a unique openId for the user (required field)
+      const openId = `invitation-${inv.id}-${Date.now()}`;
+
+      // Create user with the role from invitation
+      const result = await db.insert(users).values({
+        openId,
+        email: inv.email,
+        name: input.name,
+        password: hashedPassword,
+        role: inv.role as any,
+        loginMethod: "email",
+      });
+
       // Update invitation as used
       await db
         .update(invitations)
         .set({ usedAt: new Date() })
         .where(eq(invitations.id, inv.id));
 
-      // Note: The actual user creation happens via OAuth flow
-      // This endpoint just marks the invitation as used
-      // The user will be created when they first login via OAuth
-
       return {
         success: true,
-        message: "Invitation accepted. You can now login with your email.",
+        message: "Compte créé avec succès. Vous pouvez maintenant vous connecter.",
+        email: inv.email,
+        role: inv.role,
       };
     }),
 

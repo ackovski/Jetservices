@@ -129,3 +129,15 @@
 - [x] Corriger l'envoi d'emails lors de la création d'une invitation (admin, conseiller, partenaire)
 - [x] Ajouter la notification lors du renvoi d'une invitation
 - [x] Tous les tests passent (33/33)
+
+
+## Page d'Acceptation d'Invitation - Phase 7
+
+- [x] Créer la procédure tRPC pour accepter l'invitation et créer le compte avec mot de passe
+- [x] Créer la page `/accept-invitation` avec formulaire complet
+- [x] Ajouter la route dans App.tsx
+- [x] Tester le flux complet d'invitation
+- [x] Valider la création de compte avec le rôle correct
+- [x] Corriger la gestion du token manquant dans AcceptInvitation
+- [x] Ajouter 10 tests pour le flux d'invitation (verify et accept)
+- [x] Tous les tests passent (43/43)
