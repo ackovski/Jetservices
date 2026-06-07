@@ -5,6 +5,7 @@ import { invitations, users } from "../../drizzle/schema";
 import { eq, isNull } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
+import { notifyOwner } from "../_core/notification";
 
 export const invitationsRouter = router({
   // Create invitation (super_admin and admin only)
@@ -45,12 +46,27 @@ export const invitationsRouter = router({
         createdBy: ctx.user.id,
       });
 
-      // TODO: Send email with invitation link
-      // Example: https://yoursite.com/accept-invitation?token={token}
+      // Send invitation email
+      const invitationLink = `${process.env.VITE_APP_URL || "http://localhost:3000"}/accept-invitation?token=${token}`;
+      const roleLabel: Record<string, string> = {
+        admin: "Administrateur",
+        conseiller: "Conseiller",
+        partenaire: "Partenaire",
+      };
+
+      try {
+        await notifyOwner({
+          title: `Invitation envoyée à ${input.email}`,
+          content: `Une invitation a été envoyée à ${input.email} pour le rôle de ${roleLabel[input.role]}.\n\nLien d'invitation: ${invitationLink}\n\nExpire le: ${expiresAt.toLocaleString("fr-FR")}`,
+        });
+      } catch (emailError) {
+        console.error("Failed to send invitation email:", emailError);
+        // Don't fail the invitation creation if email fails
+      }
 
       return {
         success: true,
-        invitationLink: `${process.env.VITE_APP_URL || "http://localhost:3000"}/accept-invitation?token=${token}`,
+        invitationLink,
       };
     }),
 
@@ -182,9 +198,27 @@ export const invitationsRouter = router({
         .set({ token, expiresAt })
         .where(eq(invitations.id, invitation[0].id));
 
+      // Send resend invitation email
+      const invitationLink = `${process.env.VITE_APP_URL || "http://localhost:3000"}/accept-invitation?token=${token}`;
+      const roleLabel: Record<string, string> = {
+        admin: "Administrateur",
+        conseiller: "Conseiller",
+        partenaire: "Partenaire",
+      };
+
+      try {
+        await notifyOwner({
+          title: `Invitation renvoyée à ${email}`,
+          content: `Une nouvelle invitation a été envoyée à ${email} pour le rôle de ${roleLabel[invitation[0].role]}.\n\nLien d'invitation: ${invitationLink}\n\nExpire le: ${expiresAt.toLocaleString("fr-FR")}`,
+        });
+      } catch (emailError) {
+        console.error("Failed to send resend invitation email:", emailError);
+        // Don't fail the resend if email fails
+      }
+
       return {
         success: true,
-        invitationLink: `${process.env.VITE_APP_URL || "http://localhost:3000"}/accept-invitation?token=${token}`,
+        invitationLink,
       };
     }),
 });

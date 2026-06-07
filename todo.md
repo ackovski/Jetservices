@@ -122,3 +122,10 @@
   - [x] Utiliser la procédure tRPC `clientProfile.updateProfile`
   - [x] Ajouter validation avec Zod
   - [x] Tous les tests passent (33/33)
+
+
+## Bug Fix - Invitations par Email
+
+- [x] Corriger l'envoi d'emails lors de la création d'une invitation (admin, conseiller, partenaire)
+- [x] Ajouter la notification lors du renvoi d'une invitation
+- [x] Tous les tests passent (33/33)
