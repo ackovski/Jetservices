@@ -11,11 +11,14 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import ClientDashboard from "./pages/ClientDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import ConseillerDashboard from "./pages/ConseillerDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
 import StudentDetail from "./pages/StudentDetail";
+import StudentProfile from "./pages/StudentProfile";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -29,11 +32,14 @@ function Router() {
       <Route path={"/contact"} component={Contact} />
       <Route path={"/signup"} component={Signup} />
       <Route path={"/login"} component={Login} />
+      <Route path={"/forgot-password"} component={ForgotPassword} />
+      <Route path={"/reset-password/:token"} component={ResetPassword} />
       <Route path={"/dashboard"} component={ClientDashboard} />
       <Route path={"/admin-dashboard"} component={AdminDashboard} />
       <Route path={"/conseiller-dashboard"} component={ConseillerDashboard} />
       <Route path={"/student-dashboard"} component={StudentDashboard} />
       <Route path={"/student/:id"} component={StudentDetail} />
+      <Route path={"/student-profile"} component={StudentProfile} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

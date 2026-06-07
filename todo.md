@@ -95,3 +95,30 @@
 - [x] Tester le flux complet : Signup -> Auto-login -> Dashboard accessible
 - [x] Valider les permissions RBAC sur tous les dashboards
 - [x] Tous les tests passent (31/31)
+
+
+## Nouvelles Fonctionnalités - Phase 6
+
+- [x] Implémenter le flux de réinitialisation de mot de passe
+  - [x] Ajouter table `passwordResets` pour les tokens de réinitialisation
+  - [x] Créer procédures tRPC `requestReset`, `verifyToken`, `resetPassword`
+  - [x] Créer page `/forgot-password` pour demander la réinitialisation
+  - [x] Créer page `/reset-password/:token` pour réinitialiser le mot de passe
+  - [x] Ajouter lien "Mot de passe oublié" dans le formulaire de connexion
+  - [x] Flux complet avec tokens de 24h et validation
+
+- [x] Mettre en place les notifications par email
+  - [x] Créer emailService.ts avec templates d'emails
+  - [x] Envoyer email de confirmation après inscription
+  - [x] Envoyer email de notification pour mises à jour de dossiers
+  - [x] Intégration avec notifyOwner pour les notifications
+  - [x] Support pour rendez-vous et messages
+
+- [x] Créer la page de profil étudiant éditable
+  - [x] Créer page `/student-profile` accessible depuis le dashboard
+  - [x] Ajouter formulaire d'édition des informations personnelles
+  - [x] Ajouter section pour les documents d'identité
+  - [x] Ajouter section pour les préférences d'études
+  - [x] Utiliser la procédure tRPC `clientProfile.updateProfile`
+  - [x] Ajouter validation avec Zod
+  - [x] Tous les tests passent (33/33)

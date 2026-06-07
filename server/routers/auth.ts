@@ -7,6 +7,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "../_core/cookies";
 import { hashPassword } from "../_core/password";
 import { sdk } from "../_core/sdk";
+import { sendSignupConfirmationEmail } from "../_core/emailService";
 
 const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
@@ -99,6 +100,14 @@ export const authRouter = router({
 
         // Créer une session authentifiée (comme dans login)
         await setSessionCookie(ctx, openId);
+
+        // Send signup confirmation email
+        try {
+          await sendSignupConfirmationEmail(input.email, input.name);
+        } catch (emailError) {
+          console.error("Failed to send signup email:", emailError);
+          // Don't fail the signup if email fails
+        }
 
         return {
           success: true,

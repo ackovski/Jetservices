@@ -10,6 +10,7 @@ import { paymentsRouter } from "./routers/payments";
 import { invitationsRouter } from "./routers/invitations";
 import { authRouter } from "./routers/auth";
 import { emailAuthRouter } from "./routers/emailAuth";
+import { passwordResetRouter } from "./routers/passwordReset";
 // Note: Full S3 integration available in server/routers/documents.ts
 
 export const appRouter = router({
@@ -17,6 +18,7 @@ export const appRouter = router({
   system: systemRouter,
   auth: authRouter,
   emailAuth: emailAuthRouter,
+  passwordReset: passwordResetRouter,
 
   // Client profile routes
   clientProfile: router({
