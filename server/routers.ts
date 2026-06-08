@@ -11,6 +11,7 @@ import { invitationsRouter } from "./routers/invitations";
 import { authRouter } from "./routers/auth";
 import { emailAuthRouter } from "./routers/emailAuth";
 import { passwordResetRouter } from "./routers/passwordReset";
+import { identityDocumentsRouter } from "./routers/documents";
 // Note: Full S3 integration available in server/routers/documents.ts
 
 export const appRouter = router({
@@ -98,6 +99,7 @@ export const appRouter = router({
   messaging: messagingRouter,
   payments: paymentsRouter,
   invitations: invitationsRouter,
+  identityDocuments: identityDocumentsRouter,
 });
 
 export type AppRouter = typeof appRouter;

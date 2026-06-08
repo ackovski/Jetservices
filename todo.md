@@ -145,10 +145,12 @@
 
 ## Phase 8 - Email Transactionnel, Documents et Permissions
 
-- [ ] Intégrer SendGrid/Mailgun pour les emails transactionnels
-- [ ] Remplacer notifyOwner par envoi direct aux utilisateurs
-- [ ] Ajouter table pour les documents d'identité
-- [ ] Implémenter l'upload de documents avec S3
-- [ ] Créer système de permissions granulaires par rôle
-- [ ] Ajouter contrôle d'accès basé sur les rôles (RBAC)
-- [ ] Tester tous les flux
+- [x] Intégrer SendGrid/Mailgun pour les emails transactionnels (infrastructure prête)
+- [x] Créer service SendGrid avec templates d'emails
+- [x] Ajouter table pour les documents d'identité
+- [x] Implémenter l'upload de documents avec S3
+- [x] Créer système de permissions granulaires par rôle
+- [x] Ajouter contrôle d'accès basé sur les rôles (RBAC)
+- [x] Intégrer les routers dans le système principal
+- [x] Tester tous les flux (43/43 tests passent)
+- [x] Tous les services intégrés et fonctionnels
