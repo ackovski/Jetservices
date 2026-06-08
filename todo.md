@@ -141,3 +141,14 @@
 - [x] Corriger la gestion du token manquant dans AcceptInvitation
 - [x] Ajouter 10 tests pour le flux d'invitation (verify et accept)
 - [x] Tous les tests passent (43/43)
+
+
+## Phase 8 - Email Transactionnel, Documents et Permissions
+
+- [ ] Intégrer SendGrid/Mailgun pour les emails transactionnels
+- [ ] Remplacer notifyOwner par envoi direct aux utilisateurs
+- [ ] Ajouter table pour les documents d'identité
+- [ ] Implémenter l'upload de documents avec S3
+- [ ] Créer système de permissions granulaires par rôle
+- [ ] Ajouter contrôle d'accès basé sur les rôles (RBAC)
+- [ ] Tester tous les flux

@@ -36,6 +36,13 @@
       "when": 1780644620221,
       "tag": "0004_foamy_ser_duncan",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1780902598113,
+      "tag": "0005_lively_energizer",
+      "breakpoints": true
     }
   ]
 }

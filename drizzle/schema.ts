@@ -330,3 +330,81 @@ export const passwordResets = mysqlTable("passwordResets", {
 
 export type PasswordReset = typeof passwordResets.$inferSelect;
 export type InsertPasswordReset = typeof passwordResets.$inferInsert;
+
+
+/**
+ * Identity Documents table
+ * Stores uploaded identity documents for students
+ */
+export const identityDocuments = mysqlTable("identityDocuments", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  documentType: mysqlEnum("documentType", ["passport", "national_id", "driver_license", "birth_certificate", "residence_permit"]).notNull(),
+  fileName: varchar("fileName", { length: 255 }).notNull(),
+  fileKey: varchar("fileKey", { length: 255 }).notNull(), // S3 storage key
+  fileUrl: text("fileUrl").notNull(), // Signed S3 URL
+  mimeType: varchar("mimeType", { length: 50 }),
+  fileSize: int("fileSize"), // In bytes
+  uploadedAt: timestamp("uploadedAt").defaultNow().notNull(),
+  expiresAt: timestamp("expiresAt"), // Document expiration date
+  status: mysqlEnum("status", ["pending", "verified", "rejected", "expired"]).default("pending").notNull(),
+  verificationNotes: text("verificationNotes"),
+  verifiedBy: int("verifiedBy"), // FK to admin user who verified
+  verifiedAt: timestamp("verifiedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type IdentityDocument = typeof identityDocuments.$inferSelect;
+export type InsertIdentityDocument = typeof identityDocuments.$inferInsert;
+
+/**
+ * Role Permissions table
+ * Defines granular permissions for each role
+ */
+export const rolePermissions = mysqlTable("rolePermissions", {
+  id: int("id").autoincrement().primaryKey(),
+  role: mysqlEnum("role", ["super_admin", "admin", "conseiller", "etudiant", "partenaire", "user"]).notNull(),
+  permission: varchar("permission", { length: 100 }).notNull(), // e.g., "view_students", "edit_dossier", "send_message"
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type RolePermission = typeof rolePermissions.$inferSelect;
+export type InsertRolePermission = typeof rolePermissions.$inferInsert;
+
+/**
+ * User Permissions table
+ * Stores custom permissions for specific users (overrides role permissions)
+ */
+export const userPermissions = mysqlTable("userPermissions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  permission: varchar("permission", { length: 100 }).notNull(),
+  grantedBy: int("grantedBy").notNull(), // FK to admin user
+  grantedAt: timestamp("grantedAt").defaultNow().notNull(),
+  expiresAt: timestamp("expiresAt"), // Optional expiration
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type UserPermission = typeof userPermissions.$inferSelect;
+export type InsertUserPermission = typeof userPermissions.$inferInsert;
+
+/**
+ * Audit Logs table
+ * Tracks sensitive actions for compliance and security
+ */
+export const auditLogs = mysqlTable("auditLogs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  action: varchar("action", { length: 255 }).notNull(), // e.g., "view_document", "edit_dossier", "delete_user"
+  resourceType: varchar("resourceType", { length: 100 }), // e.g., "student", "document", "dossier"
+  resourceId: int("resourceId"),
+  changes: text("changes"), // JSON with before/after values
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  userAgent: text("userAgent"),
+  status: mysqlEnum("status", ["success", "failure"]).default("success").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type InsertAuditLog = typeof auditLogs.$inferInsert;
