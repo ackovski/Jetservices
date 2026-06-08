@@ -154,3 +154,13 @@
 - [x] Intégrer les routers dans le système principal
 - [x] Tester tous les flux (43/43 tests passent)
 - [x] Tous les services intégrés et fonctionnels
+
+
+## Système de Notification Visuelle des Documents - Phase 9
+
+- [x] Créer composant DocumentStatusCard pour afficher le statut des documents
+- [x] Intégrer le composant dans la page StudentProfile
+- [x] Ajouter appels tRPC pour récupérer les documents de l'étudiant
+- [x] Ajouter indicateurs visuels (couleurs, icônes) pour chaque statut
+- [x] Afficher les notes de vérification si disponibles
+- [x] Tester le flux complet (43/43 tests passent)

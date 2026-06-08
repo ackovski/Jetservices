@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,8 +10,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, Upload } from "lucide-react";
 import { useLocation } from "wouter";
+import { DocumentStatusCard } from "@/components/DocumentStatusCard";
 
 const profileSchema = z.object({
   firstName: z.string().min(2, "Le prénom doit avoir au moins 2 caractères"),
@@ -24,6 +25,110 @@ const profileSchema = z.object({
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
+
+function DocumentsSection() {
+  const documentsQuery = trpc.identityDocuments.getMyIdentityDocuments.useQuery();
+  const [isUploading, setIsUploading] = useState(false);
+
+  const uploadMutation = trpc.identityDocuments.uploadIdentity.useMutation({
+    onSuccess: () => {
+      toast.success("Document téléchargé avec succès !");
+      setIsUploading(false);
+      documentsQuery.refetch();
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Erreur lors du téléchargement");
+      setIsUploading(false);
+    },
+  });
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file size
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("Le fichier dépasse 10MB");
+      return;
+    }
+
+    setIsUploading(true);
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      const base64 = (reader.result as string).split(",")[1];
+      uploadMutation.mutate({
+        documentType: "passport",
+        fileName: file.name,
+        fileData: base64,
+        mimeType: file.type,
+      });
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const documents = documentsQuery.data || [];
+
+  return (
+    <div className="space-y-6">
+      <DocumentStatusCard documents={documents} isLoading={documentsQuery.isLoading} />
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Upload className="w-5 h-5" />
+            Télécharger un Nouveau Document
+          </CardTitle>
+          <CardDescription>
+            Téléchargez vos documents d'identité pour compléter votre profil
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="border-2 border-dashed rounded-lg p-8 text-center hover:bg-muted/50 transition cursor-pointer">
+            <input
+              type="file"
+              accept=".pdf,.jpg,.jpeg,.png"
+              onChange={handleFileUpload}
+              disabled={isUploading}
+              className="hidden"
+              id="file-upload"
+            />
+            <label htmlFor="file-upload" className="cursor-pointer block">
+              <div className="space-y-2">
+                <Upload className="w-8 h-8 mx-auto text-muted-foreground" />
+                <p className="text-muted-foreground font-medium">
+                  {isUploading ? "Téléchargement en cours..." : "Cliquez pour sélectionner un fichier"}
+                </p>
+                <p className="text-xs text-muted-foreground">JPG, PNG ou PDF (max 10MB)</p>
+              </div>
+            </label>
+          </div>
+
+          {isUploading && (
+            <div className="space-y-2">
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-blue-600 h-2 rounded-full transition-all animate-pulse" style={{ width: "100%" }} />
+              </div>
+              <p className="text-sm text-muted-foreground text-center">Téléchargement en cours...</p>
+            </div>
+          )}
+
+          <div className="text-sm text-muted-foreground">
+            <p className="font-medium mb-2">Documents acceptés :</p>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Passeport</li>
+              <li>Carte d'identité nationale</li>
+              <li>Permis de conduire</li>
+              <li>Acte de naissance</li>
+              <li>Titre de séjour</li>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
 
 export default function StudentProfile() {
   const [, setLocation] = useLocation();
@@ -77,11 +182,7 @@ export default function StudentProfile() {
       <div className="container mx-auto py-8 px-4">
         {/* Header */}
         <div className="mb-8">
-          <Button
-            variant="ghost"
-            onClick={() => setLocation("/student-dashboard")}
-            className="mb-4"
-          >
+          <Button variant="ghost" onClick={() => setLocation("/student-dashboard")} className="mb-4">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Retour au Dashboard
           </Button>
@@ -91,7 +192,7 @@ export default function StudentProfile() {
           </p>
         </div>
 
-        <Tabs defaultValue="personal" className="max-w-2xl">
+        <Tabs defaultValue="personal" className="max-w-4xl">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="personal">Infos Personnelles</TabsTrigger>
             <TabsTrigger value="studies">Études</TabsTrigger>
@@ -103,9 +204,7 @@ export default function StudentProfile() {
             <Card>
               <CardHeader>
                 <CardTitle>Informations Personnelles</CardTitle>
-                <CardDescription>
-                  Mettez à jour vos informations de base
-                </CardDescription>
+                <CardDescription>Mettez à jour vos informations de base</CardDescription>
               </CardHeader>
               <CardContent>
                 <Form {...form}>
@@ -205,9 +304,7 @@ export default function StudentProfile() {
             <Card>
               <CardHeader>
                 <CardTitle>Informations d'Études</CardTitle>
-                <CardDescription>
-                  Mettez à jour vos préférences d'études
-                </CardDescription>
+                <CardDescription>Mettez à jour vos préférences d'études</CardDescription>
               </CardHeader>
               <CardContent>
                 <Form {...form}>
@@ -260,34 +357,7 @@ export default function StudentProfile() {
 
           {/* Documents Tab */}
           <TabsContent value="documents">
-            <Card>
-              <CardHeader>
-                <CardTitle>Documents d'Identité</CardTitle>
-                <CardDescription>
-                  Gérez vos documents d'identité et pièces justificatives
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="bg-muted p-6 rounded-lg text-center">
-                  <p className="text-muted-foreground mb-4">
-                    Aucun document uploadé pour le moment
-                  </p>
-                  <Button variant="outline">
-                    Télécharger un Document
-                  </Button>
-                </div>
-
-                <div className="text-sm text-muted-foreground">
-                  <p className="font-medium mb-2">Documents acceptés :</p>
-                  <ul className="list-disc list-inside space-y-1">
-                    <li>Carte d'identité (JPG, PNG, PDF)</li>
-                    <li>Passeport (JPG, PNG, PDF)</li>
-                    <li>Diplômes (JPG, PNG, PDF)</li>
-                    <li>Relevés de notes (JPG, PNG, PDF)</li>
-                  </ul>
-                </div>
-              </CardContent>
-            </Card>
+            <DocumentsSection />
           </TabsContent>
         </Tabs>
       </div>
