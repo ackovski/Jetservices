@@ -166,9 +166,32 @@ export const identityDocumentsRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
+      const { users } = require("../../drizzle/schema");
+      const { leftJoin } = require("drizzle-orm");
+
       const docs = await db
-        .select()
+        .select({
+          id: identityDocuments.id,
+          userId: identityDocuments.userId,
+          documentType: identityDocuments.documentType,
+          fileName: identityDocuments.fileName,
+          fileKey: identityDocuments.fileKey,
+          fileUrl: identityDocuments.fileUrl,
+          mimeType: identityDocuments.mimeType,
+          fileSize: identityDocuments.fileSize,
+          status: identityDocuments.status,
+          uploadedAt: identityDocuments.uploadedAt,
+          expiresAt: identityDocuments.expiresAt,
+          verificationNotes: identityDocuments.verificationNotes,
+          verifiedBy: identityDocuments.verifiedBy,
+          verifiedAt: identityDocuments.verifiedAt,
+          createdAt: identityDocuments.createdAt,
+          updatedAt: identityDocuments.updatedAt,
+          userEmail: users.email,
+          userName: users.name,
+        })
         .from(identityDocuments)
+        .leftJoin(users, eq(identityDocuments.userId, users.id))
         .where(eq(identityDocuments.status, "pending"))
         .orderBy(identityDocuments.uploadedAt);
 

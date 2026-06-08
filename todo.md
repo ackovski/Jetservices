@@ -164,3 +164,16 @@
 - [x] Ajouter indicateurs visuels (couleurs, icônes) pour chaque statut
 - [x] Afficher les notes de vérification si disponibles
 - [x] Tester le flux complet (43/43 tests passent)
+
+
+## Tableau de Bord Admin Documents - Phase 10
+
+- [x] Créer la page AdminDocuments avec tableau des documents en attente
+- [x] Ajouter le modal de vérification avec formulaire de notes
+- [x] Ajouter les boutons Approuver/Rejeter avec confirmation
+- [x] Afficher les informations de l'étudiant
+- [x] Ajouter les filtres (statut, type de document, date)
+- [x] Ajouter la pagination et le tri
+- [x] Ajouter la route /admin/documents
+- [x] Intégrer dans le menu admin
+- [x] Tester le flux complet (43/43 tests passent)

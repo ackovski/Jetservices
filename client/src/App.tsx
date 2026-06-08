@@ -20,6 +20,7 @@ import StudentDashboard from "./pages/StudentDashboard";
 import StudentDetail from "./pages/StudentDetail";
 import StudentProfile from "./pages/StudentProfile";
 import AcceptInvitation from "./pages/AcceptInvitation";
+import AdminDocuments from "./pages/AdminDocuments";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -42,6 +43,7 @@ function Router() {
       <Route path={"/student/:id"} component={StudentDetail} />
       <Route path={"/student-profile"} component={StudentProfile} />
       <Route path={"/accept-invitation"} component={AcceptInvitation} />
+      <Route path={"/admin/documents"} component={AdminDocuments} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

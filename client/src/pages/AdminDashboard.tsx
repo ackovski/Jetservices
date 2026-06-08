@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Plus, Mail, Users, DollarSign, MessageSquare } from "lucide-react";
+import { Loader2, Plus, Mail, Users, DollarSign, MessageSquare, FileCheck } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
@@ -64,6 +64,14 @@ export default function AdminDashboard() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Tableau de Bord Admin</h1>
           <p className="text-gray-600 mt-2">Gérez les utilisateurs, les étudiants et les paiements</p>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="mb-8 flex gap-2">
+          <Button onClick={() => setLocation("/admin/documents")} variant="outline" className="flex items-center gap-2">
+            <FileCheck className="w-4 h-4" />
+            Gestion des Documents
+          </Button>
         </div>
 
         {/* Stats Cards */}
