@@ -58,28 +58,8 @@ export const appRouter = router({
     }),
   }),
 
-  // Documents routes - simplified for now, full implementation in routers/documents.ts
-  documents: router({
-    list: protectedProcedure.input(z.object({
-      dossierId: z.number(),
-    })).query(async ({ ctx, input }) => {
-      return getDocuments(input.dossierId, ctx.user.id);
-    }),
-    upload: protectedProcedure.input(z.object({
-      dossierId: z.number(),
-      fileName: z.string(),
-      fileKey: z.string(),
-      fileUrl: z.string(),
-      fileType: z.string().optional(),
-      fileSize: z.number().optional(),
-    })).mutation(async ({ ctx, input }) => {
-      await createDocument({
-        ...input,
-        uploadedBy: ctx.user.id,
-      }, ctx.user.id);
-      return { success: true };
-    }),
-  }),
+  // Documents routes - merged with identity documents
+  // Note: Full S3 integration available in server/routers/documents.ts
 
   // Contact form routes
   contact: router({
@@ -99,7 +79,7 @@ export const appRouter = router({
   messaging: messagingRouter,
   payments: paymentsRouter,
   invitations: invitationsRouter,
-  identityDocuments: identityDocumentsRouter,
+  documents: identityDocumentsRouter,
 });
 
 export type AppRouter = typeof appRouter;

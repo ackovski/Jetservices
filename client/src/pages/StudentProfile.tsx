@@ -27,10 +27,10 @@ const profileSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 function DocumentsSection() {
-  const documentsQuery = trpc.identityDocuments.getMyIdentityDocuments.useQuery();
+  const documentsQuery = trpc.documents.getMyIdentityDocuments.useQuery();
   const [isUploading, setIsUploading] = useState(false);
 
-  const uploadMutation = trpc.identityDocuments.uploadIdentity.useMutation({
+  const uploadMutation = trpc.documents.uploadIdentity.useMutation({
     onSuccess: () => {
       toast.success("Document téléchargé avec succès !");
       setIsUploading(false);

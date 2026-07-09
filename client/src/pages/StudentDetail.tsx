@@ -25,7 +25,7 @@ export default function StudentDetail() {
   // Queries
   const studentQuery = studentId ? trpc.students.getById.useQuery(studentId) : null;
   const tasksQuery = studentId ? trpc.students.getTasks.useQuery(studentId) : null;
-  const documentsQuery = studentId ? trpc.documents.list.useQuery({ dossierId: studentId }) : null;
+  // const documentsQuery = studentId ? trpc.documents.list.useQuery({ dossierId: studentId }) : null;
 
   // Mutations
   const updateStudentMutation = trpc.students.update.useMutation();
@@ -180,6 +180,7 @@ export default function StudentDetail() {
                     </p>
                   </div>
 
+                  {/* Documents section - disabled for now
                   {documentsQuery?.data?.length ? (
                     <div className="space-y-2 mt-4">
                       {documentsQuery.data.map((doc: any) => (
@@ -204,6 +205,7 @@ export default function StudentDetail() {
                       Aucun document
                     </p>
                   )}
+                  */}
                 </CardContent>
               </Card>
             </TabsContent>

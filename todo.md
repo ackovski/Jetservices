@@ -177,3 +177,12 @@
 - [x] Ajouter la route /admin/documents
 - [x] Intégrer dans le menu admin
 - [x] Tester le flux complet (43/43 tests passent)
+
+
+## Cloche de Notifications Admin - Phase 11
+
+- [x] Créer le composant NotificationBell avec compteur
+- [x] Ajouter procédure tRPC getPendingDocumentsCount
+- [x] Intégrer dans le Header
+- [x] Ajouter polling (refetchInterval: 30s) pour mise à jour en temps réel
+- [x] Tester le flux complet (43/43 tests passent)

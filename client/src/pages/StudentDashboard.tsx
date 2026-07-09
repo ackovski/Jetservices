@@ -15,7 +15,7 @@ export default function StudentDashboard() {
   // Queries
   const profileQuery = trpc.clientProfile.getProfile.useQuery();
   const dossiersQuery = trpc.dossiers.list.useQuery();
-  const documentsQuery = selectedDossier ? trpc.documents.list.useQuery({ dossierId: selectedDossier }) : null;
+  // const documentsQuery = selectedDossier ? trpc.documents.list.useQuery({ dossierId: selectedDossier }) : null;
   const messagesQuery = trpc.messaging.getConversations.useQuery();
 
   if (loading) {
@@ -167,6 +167,7 @@ export default function StudentDashboard() {
                 <CardDescription>Fichiers téléchargés et documents requis</CardDescription>
               </CardHeader>
               <CardContent>
+                {/* Documents section - disabled for now
                 {selectedDossier ? (
                   documentsQuery?.isLoading ? (
                     <div className="flex justify-center py-8">
@@ -196,6 +197,7 @@ export default function StudentDashboard() {
                     Sélectionnez un dossier dans l'onglet "Mes Dossiers"
                   </div>
                 )}
+                */}
               </CardContent>
             </Card>
           </TabsContent>
