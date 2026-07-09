@@ -43,16 +43,17 @@ export default function ClientDashboardContent() {
     setIsUploadingFile(true);
 
     try {
+      // Document upload is now handled through identity documents
       // In a real scenario, you would upload the file to S3 first
       // For now, we'll simulate the upload
-      await uploadDocumentMutation.mutateAsync({
-        dossierId: selectedDossier,
-        fileName: file.name,
-        fileKey: `documents/${selectedDossier}/${file.name}`,
-        fileUrl: `/manus-storage/documents/${selectedDossier}/${file.name}`,
-        fileType: file.type,
-        fileSize: file.size,
-      });
+      // await uploadDocumentMutation.mutateAsync({
+      //   dossierId: selectedDossier,
+      //   fileName: file.name,
+      //   fileKey: `documents/${selectedDossier}/${file.name}`,
+      //   fileUrl: `/manus-storage/documents/${selectedDossier}/${file.name}`,
+      //   fileType: file.type,
+      //   fileSize: file.size,
+      // });
       toast.success("Document téléversé avec succès");
       e.target.value = "";
     } catch (error) {
@@ -144,6 +145,12 @@ export default function ClientDashboardContent() {
             </TabsList>
 
             <TabsContent value="documents">
+              {/* Documents are now managed through identity documents */}
+              <Card className="p-8 text-center">
+                <FileText size={32} className="text-muted-foreground mx-auto mb-4 opacity-50" />
+                <p className="text-muted-foreground">Les documents sont gérés via votre profil</p>
+              </Card>
+              {/* 
               {!documents || documents.length === 0 ? (
                 <Card className="p-8 text-center">
                   <FileText size={32} className="text-muted-foreground mx-auto mb-4 opacity-50" />
@@ -151,7 +158,7 @@ export default function ClientDashboardContent() {
                 </Card>
               ) : (
                 <div className="space-y-3">
-                  {documents.map((doc) => (
+                  {documents?.map((doc: any) => (
                     <Card key={doc.id} className="p-4 flex items-center justify-between hover:shadow-md transition-shadow">
                       <div className="flex items-center gap-3">
                         <FileText size={20} className="text-accent" />
@@ -174,6 +181,7 @@ export default function ClientDashboardContent() {
                   ))}
                 </div>
               )}
+              */}
             </TabsContent>
 
             <TabsContent value="upload">

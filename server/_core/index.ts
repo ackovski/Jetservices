@@ -8,6 +8,10 @@ import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+import { createRateLimiter } from "./rateLimiter";
+import { monitoringMiddleware } from "./monitoring";
+import { logAuditAction, AuditAction } from "./auditLogger";
+import { scheduleBackup } from "./backupService";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -34,9 +38,26 @@ async function startServer() {
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  
+  // Security middlewares
+  app.use(monitoringMiddleware); // Monitoring & alertes
+  app.use(createRateLimiter("api", 30, 60)); // 30 requests per minute for general API
+  
   registerStorageProxy(app);
   registerOAuthRoutes(app);
-  // tRPC API
+  // Health check endpoint
+  app.get("/health", (req, res) => {
+    res.json({ status: "ok", timestamp: new Date().toISOString() });
+  });
+  
+  // Backup health check endpoint
+  app.get("/health/backup", async (req, res) => {
+    const { getBackupHealth } = await import("./backupService");
+    const health = getBackupHealth();
+    res.json(health);
+  });
+
+    // tRPC API
   app.use(
     "/api/trpc",
     createExpressMiddleware({

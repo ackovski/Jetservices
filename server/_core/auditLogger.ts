@@ -1,5 +1,6 @@
 import { getDb } from "../db";
 import { auditLogs } from "../../drizzle/schema";
+import { eq, and, gte, lte } from "drizzle-orm";
 
 /**
  * Audit Logger - Tracks all critical actions for compliance and security
@@ -92,27 +93,31 @@ export async function getAuditLogs(
   try {
     const db = await getDb();
     if (!db) return [];
-    let query = db.select().from(auditLogs);
-
+    
+    const conditions: any[] = [];
+    
     if (filters?.userId) {
-      query = query.where((col: any) => col.userId === filters.userId);
+      conditions.push(eq(auditLogs.userId, filters.userId));
     }
 
     if (filters?.action) {
-      query = query.where((col: any) => col.action === filters.action);
+      conditions.push(eq(auditLogs.action, filters.action));
     }
 
     if (filters?.startDate) {
-      const startDate = filters.startDate;
-      query = query.where((col: any) => col.timestamp >= startDate);
+      conditions.push(gte(auditLogs.timestamp, filters.startDate));
     }
 
     if (filters?.endDate) {
-      const endDate = filters.endDate;
-      query = query.where((col: any) => col.timestamp <= endDate);
+      conditions.push(lte(auditLogs.timestamp, filters.endDate));
     }
 
-    const result = await query.limit(filters?.limit || 100);
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+    const result = await db
+      .select()
+      .from(auditLogs)
+      .where(whereClause)
+      .limit(filters?.limit || 100);
     return result;
   } catch (error) {
     console.error("[Audit] Failed to retrieve logs:", error);
