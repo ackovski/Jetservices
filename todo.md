@@ -186,3 +186,47 @@
 - [x] Intégrer dans le Header
 - [x] Ajouter polling (refetchInterval: 30s) pour mise à jour en temps réel
 - [x] Tester le flux complet (43/43 tests passent)
+
+
+## Phase 12 - Sécurité Production (100%)
+
+### Email Transactionnel - SendGrid
+- [ ] Intégrer SendGrid pour les invitations
+- [ ] Intégrer SendGrid pour réinitialisation mot de passe
+- [ ] Intégrer SendGrid pour confirmations inscription
+- [ ] Tester l'envoi d'emails en production
+
+### Rate Limiting & DDoS Protection
+- [ ] Ajouter rate limiting sur les endpoints critiques
+- [ ] Protéger les endpoints d'authentification
+- [ ] Ajouter CORS strict
+- [ ] Implémenter protection brute-force
+
+### Logs d'Audit Complets
+- [ ] Créer table auditLogs
+- [ ] Logger toutes les actions critiques
+- [ ] Logger les accès aux documents
+- [ ] Logger les modifications de permissions
+
+### Backup Automatique DB
+- [ ] Configurer sauvegardes quotidiennes
+- [ ] Tester la restauration
+- [ ] Documenter la procédure de recovery
+
+### 2FA (Two-Factor Auth)
+- [ ] Ajouter support TOTP (Google Authenticator)
+- [ ] Créer page de configuration 2FA
+- [ ] Implémenter vérification 2FA au login
+- [ ] Ajouter codes de récupération
+
+### GDPR Compliance
+- [ ] Implémenter droit à l'oubli (delete account)
+- [ ] Ajouter export de données personnelles
+- [ ] Créer politique de confidentialité
+- [ ] Ajouter consentement cookies
+
+### Monitoring & Alertes
+- [ ] Configurer monitoring des performances
+- [ ] Ajouter alertes sur erreurs critiques
+- [ ] Monitorer l'utilisation DB
+- [ ] Monitorer les uploads de fichiers

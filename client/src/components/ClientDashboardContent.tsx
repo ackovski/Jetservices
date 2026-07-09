@@ -21,13 +21,7 @@ export default function ClientDashboardContent() {
 
   const { data: profile, isLoading: profileLoading } = trpc.clientProfile.getProfile.useQuery();
   const { data: dossiers, isLoading: dossiersLoading, refetch: refetchDossiers } = trpc.dossiers.list.useQuery();
-  const { data: documents, isLoading: documentsLoading } = trpc.documents.list.useQuery(
-    { dossierId: selectedDossier || 0 },
-    { enabled: selectedDossier !== null }
-  );
-
   const updateStatusMutation = trpc.dossiers.updateStatus.useMutation();
-  const uploadDocumentMutation = trpc.documents.upload.useMutation();
 
   const handleStatusChange = async (dossierId: number, newStatus: string) => {
     try {
