@@ -78,10 +78,10 @@ export default function AdminDocuments() {
   });
 
   // Fetch pending documents
-  const documentsQuery = trpc.identityDocuments.getPendingIdentityDocuments.useQuery();
+  const documentsQuery = trpc.documents.getPendingIdentityDocuments.useQuery();
 
   // Verify document mutation
-  const verifyMutation = trpc.identityDocuments.verifyIdentityDocument.useMutation({
+  const verifyMutation = trpc.documents.verifyIdentityDocument.useMutation({
     onSuccess: () => {
       toast.success("Document vérifié avec succès !");
       setIsVerificationOpen(false);
@@ -125,7 +125,7 @@ export default function AdminDocuments() {
   }
 
   const documents = documentsQuery.data || [];
-  const filteredDocuments = documents.filter((doc) => {
+  const filteredDocuments = documents.filter((doc: any) => {
     const matchesSearch =
       doc.fileName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (doc.userEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
@@ -198,7 +198,7 @@ export default function AdminDocuments() {
               <CardTitle className="text-sm font-medium">Documents en attente</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{documents.filter((d) => d.status === "pending").length}</div>
+              <div className="text-2xl font-bold">{documents.filter((d: any) => d.status === "pending").length}</div>
               <p className="text-xs text-muted-foreground mt-1">À vérifier</p>
             </CardContent>
           </Card>
@@ -209,7 +209,7 @@ export default function AdminDocuments() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-600">
-                {documents.filter((d) => d.status === "verified").length}
+                {documents.filter((d: any) => d.status === "verified").length}
               </div>
               <p className="text-xs text-muted-foreground mt-1">Approuvés</p>
             </CardContent>
@@ -221,7 +221,7 @@ export default function AdminDocuments() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-red-600">
-                {documents.filter((d) => d.status === "rejected").length}
+                {documents.filter((d: any) => d.status === "rejected").length}
               </div>
               <p className="text-xs text-muted-foreground mt-1">Refusés</p>
             </CardContent>
@@ -295,7 +295,7 @@ export default function AdminDocuments() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredDocuments.map((doc) => (
+                    {filteredDocuments.map((doc: any) => (
                       <TableRow key={doc.id}>
                         <TableCell className="font-medium">
                           {getDocumentTypeLabel(doc.documentType)}

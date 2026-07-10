@@ -56,19 +56,18 @@ export async function logAuditAction(entry: AuditLogEntry): Promise<void> {
   try {
     const db = await getDb();
     if (!db) return;
-    await db.insert(auditLogs).values({
-      action: entry.action,
-      userId: entry.userId,
-      targetUserId: entry.targetUserId,
-      resourceType: entry.resourceType,
-      resourceId: entry.resourceId,
-      details: entry.details ? JSON.stringify(entry.details) : null,
-      ipAddress: entry.ipAddress,
-      userAgent: entry.userAgent,
-      status: entry.status,
-      errorMessage: entry.errorMessage,
-      timestamp: new Date(),
-    });
+    await db.insert(auditLogs).values([
+      {
+        action: entry.action,
+        userId: entry.userId || 0,
+        resourceType: entry.resourceType,
+        resourceId: entry.resourceId ? parseInt(entry.resourceId) : undefined,
+        changes: entry.details ? JSON.stringify(entry.details) : null,
+        ipAddress: entry.ipAddress,
+        userAgent: entry.userAgent,
+        status: entry.status,
+      }
+    ]);
 
     console.log(`[Audit] ${entry.action} - ${entry.status}`, {
       userId: entry.userId,
@@ -105,11 +104,11 @@ export async function getAuditLogs(
     }
 
     if (filters?.startDate) {
-      conditions.push(gte(auditLogs.timestamp, filters.startDate));
+      conditions.push(gte(auditLogs.createdAt, filters.startDate));
     }
 
     if (filters?.endDate) {
-      conditions.push(lte(auditLogs.timestamp, filters.endDate));
+      conditions.push(lte(auditLogs.createdAt, filters.endDate));
     }
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;

@@ -41,7 +41,7 @@ async function startServer() {
   
   // Security middlewares
   app.use(monitoringMiddleware); // Monitoring & alertes
-  app.use(createRateLimiter("api", 30, 60)); // 30 requests per minute for general API
+  app.use(createRateLimiter({ maxRequests: 30, windowMs: 60 * 1000 })); // 30 requests per minute for general API
   
   registerStorageProxy(app);
   registerOAuthRoutes(app);
