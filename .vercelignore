@@ -1,0 +1,16 @@
+.git
+.gitignore
+.manus-logs
+.env.local
+.env.*.local
+node_modules
+pnpm-lock.yaml
+*.test.ts
+*.test.tsx
+vitest.config.ts
+server/auth.logout.test.ts
+.prettierignore
+.prettierrc
+README.md
+drizzle/migrations
+.project-config.json

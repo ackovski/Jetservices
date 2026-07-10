@@ -1,0 +1,70 @@
+{
+  "version": 2,
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install",
+  "framework": "vite",
+  "env": {
+    "DATABASE_URL": {
+      "description": "MySQL/TiDB connection string"
+    },
+    "JWT_SECRET": {
+      "description": "Secret key for JWT session signing"
+    },
+    "VITE_APP_ID": {
+      "description": "OAuth application ID"
+    },
+    "OAUTH_SERVER_URL": {
+      "description": "OAuth server base URL"
+    },
+    "VITE_OAUTH_PORTAL_URL": {
+      "description": "OAuth portal URL for frontend"
+    },
+    "OWNER_OPEN_ID": {
+      "description": "Owner's OpenID"
+    },
+    "OWNER_NAME": {
+      "description": "Owner's name"
+    },
+    "BUILT_IN_FORGE_API_URL": {
+      "description": "Manus built-in APIs URL"
+    },
+    "BUILT_IN_FORGE_API_KEY": {
+      "description": "Manus built-in APIs key (server-side)"
+    },
+    "VITE_FRONTEND_FORGE_API_URL": {
+      "description": "Manus built-in APIs URL for frontend"
+    },
+    "VITE_FRONTEND_FORGE_API_KEY": {
+      "description": "Manus built-in APIs key for frontend"
+    },
+    "STRIPE_SECRET_KEY": {
+      "description": "Stripe secret API key"
+    },
+    "STRIPE_WEBHOOK_SECRET": {
+      "description": "Stripe webhook signing secret"
+    },
+    "VITE_STRIPE_PUBLISHABLE_KEY": {
+      "description": "Stripe publishable key for frontend"
+    },
+    "SENDGRID_API_KEY": {
+      "description": "SendGrid API key for transactional emails"
+    },
+    "VITE_ANALYTICS_ENDPOINT": {
+      "description": "Analytics endpoint URL"
+    },
+    "VITE_ANALYTICS_WEBSITE_ID": {
+      "description": "Analytics website ID"
+    }
+  },
+  "functions": {
+    "api/**": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
+    }
+  ]
+}
